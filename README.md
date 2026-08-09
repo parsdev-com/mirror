@@ -10,13 +10,13 @@
 اسکریپت زیر توزیع و نسخه سرور را خودش تشخیص می دهد و تمام مراحل بخش دستی را انجام می دهد. دستور را با کاربر root اجرا کنید.
 
 ```bash
-curl -fsSL https://mirror.parsdev.com/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/parsdev-com/mirror/main/setup.sh | bash
 ```
 
 برای بازگرداندن مخازن اولیه:
 
 ```bash
-curl -fsSL https://mirror.parsdev.com/setup.sh | bash -s -- --rollback
+curl -fsSL https://raw.githubusercontent.com/parsdev-com/mirror/main/setup.sh | bash -s -- --rollback
 ```
 
 > **نکته**
