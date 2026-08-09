@@ -27,11 +27,11 @@ curl -fsSL https://raw.githubusercontent.com/parsdev-com/mirror/main/setup.sh | 
 
 روی عنوان سیستم خود کلیک کنید تا دستورات آن باز شود.
 
-### اوبونتو
+### Ubuntu
 
 <details>
   <summary>
-  اوبونتو ۲۲.۰۴ LTS — jammy
+  Ubuntu 22.04 LTS — jammy
   </summary>
 
 فایل `/etc/apt/sources.list` بازنویسی می شود:
@@ -63,7 +63,7 @@ sudo apt-get update
 
 <details>
   <summary>
-  اوبونتو ۲۰.۰۴ LTS — focal
+  Ubuntu 20.04 LTS — focal
   </summary>
 
 ```bash
@@ -87,11 +87,11 @@ sudo apt-get update
 
 </details>
 
-### دبیان
+### Debian
 
 <details>
   <summary>
-  دبیان ۱۳ — trixie
+  Debian 13 — trixie
   </summary>
 
 ```bash
@@ -120,7 +120,7 @@ sudo apt-get update
 
 <details>
   <summary>
-  دبیان ۱۲ — bookworm
+  Debian 12 — bookworm
   </summary>
 
 ```bash
@@ -149,7 +149,7 @@ sudo apt-get update
 
 <details>
   <summary>
-  دبیان ۱۱ — bullseye
+  Debian 11 — bullseye
   </summary>
 
 ```bash
@@ -177,11 +177,11 @@ sudo apt-get update
 
 </details>
 
-### آلما لینوکس
+### AlmaLinux
 
 <details>
   <summary>
-  آلما لینوکس ۹ و ۱۰
+  AlmaLinux 9 / 10
   </summary>
 
 فایل های `/etc/yum.repos.d/almalinux*.repo` ویرایش می شوند:
@@ -209,7 +209,7 @@ sudo dnf clean all && sudo dnf makecache
 
 <details>
   <summary>
-  آلما لینوکس ۸
+  AlmaLinux 8
   </summary>
 
 دستور با نسخه های ۹ و ۱۰ یکسان است؛ تنها فایل های پیش فرض مخزن تفاوت دارند.
@@ -260,7 +260,7 @@ sudo apt-get update
 
 > **نکته**
 >
-> مخازن دبیانِ زیرِ سیستم را هم به میرور تغییر دهید — بخش دبیان ۱۳ در بالا.
+> مخازن دبیانِ زیرِ سیستم را هم به میرور تغییر دهید — بخش Debian 13 در بالا.
 
 </details>
 
@@ -289,7 +289,7 @@ sudo apt-get update
 
 > **نکته**
 >
-> مخازن دبیانِ زیرِ سیستم را هم به میرور تغییر دهید — بخش دبیان ۱۲ در بالا.
+> مخازن دبیانِ زیرِ سیستم را هم به میرور تغییر دهید — بخش Debian 12 در بالا.
 
 </details>
 
@@ -326,6 +326,6 @@ sudo apt-get update
 
 ## توزیع های میرور شده
 
-اوبونتو focal و jammy · دبیان bullseye و bookworm و trixie · آلما لینوکس ۸ و ۹ و ۱۰ · Proxmox VE و Backup Server.<br/>
-اوبونتو و دبیان تنها برای معماری amd64 میرور شده اند.<br/>
+Ubuntu focal و jammy · Debian bullseye و bookworm و trixie · AlmaLinux 8 و 9 و 10 · Proxmox VE و Backup Server.<br/>
+Ubuntu و Debian تنها برای معماری amd64 میرور شده اند.<br/>
 فهرست کامل مخازن از طریق [mirror.parsdev.com](https://mirror.parsdev.com/) قابل مرور است.
