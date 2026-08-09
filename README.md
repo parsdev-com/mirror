@@ -123,32 +123,6 @@ sudo apt-get update
 
 </details>
 
-<details>
-  <summary>
-  Ubuntu 20.04 LTS — focal
-  </summary>
-
-```bash
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-sudo tee /etc/apt/sources.list >/dev/null <<'EOF'
-# ParsDev Mirror — Ubuntu 20.04
-deb https://mirror.parsdev.com/ubuntu/ focal main restricted universe multiverse
-deb https://mirror.parsdev.com/ubuntu/ focal-updates main restricted universe multiverse
-deb https://mirror.parsdev.com/ubuntu/ focal-security main restricted universe multiverse
-deb https://mirror.parsdev.com/ubuntu/ focal-backports main restricted universe multiverse
-EOF
-sudo apt-get update
-```
-
-بازگشت:
-
-```bash
-sudo cp /etc/apt/sources.list.bak /etc/apt/sources.list
-sudo apt-get update
-```
-
-</details>
-
 ### Debian
 
 <details>
@@ -388,6 +362,6 @@ sudo apt-get update
 
 ## توزیع های میرور شده
 
-Ubuntu focal و jammy و noble و resolute · Debian bullseye و bookworm و trixie · AlmaLinux 8 و 9 و 10 · Proxmox VE و Backup Server.<br/>
+Ubuntu jammy و noble و resolute · Debian bullseye و bookworm و trixie · AlmaLinux 8 و 9 و 10 · Proxmox VE و Backup Server.<br/>
 Ubuntu و Debian تنها برای معماری amd64 میرور شده اند.<br/>
 فهرست کامل مخازن از طریق [mirror.parsdev.com](https://mirror.parsdev.com/) قابل مرور است.
