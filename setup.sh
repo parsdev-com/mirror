@@ -7,6 +7,7 @@
 #   bash setup.sh              # detect the OS and switch it to the mirror
 #   bash setup.sh --dry-run    # show what would change, write nothing
 #   bash setup.sh --rollback   # restore the most recent backup of every file touched
+#   bash setup.sh --status     # report whether this host uses the mirror (no root needed)
 #
 # Backups are kept in /var/backups/parsdev-mirror/<timestamp>/, never beside the
 # original — apt warns about any stray file in /etc/apt/sources.list.d/.
@@ -14,9 +15,11 @@
 set -euo pipefail
 
 MIRROR="https://mirror.parsdev.com"
+MIRROR_HOST="${MIRROR#https://}"
 STAMP="$(date +%Y%m%d%H%M%S)"
 DRY_RUN=0
 ROLLBACK=0
+STATUS=0
 
 c_ok()   { printf '\033[32m%s\033[0m\n' "$*"; }
 c_warn() { printf '\033[33m%s\033[0m\n' "$*"; }
@@ -24,7 +27,7 @@ c_err()  { printf '\033[31m%s\033[0m\n' "$*" >&2; }
 info()   { printf '\033[36m==>\033[0m %s\n' "$*"; }
 
 usage() {
-  sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
@@ -32,6 +35,7 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run)  DRY_RUN=1 ;;
     --rollback) ROLLBACK=1 ;;
+    --status)   STATUS=1 ;;
     -h|--help)  usage ;;
     *) c_err "unknown option: $arg"; exit 2 ;;
   esac
@@ -212,6 +216,62 @@ rollback() {
     echo "    Run 'apt-get update' or 'dnf makecache' to refresh."
   fi
   exit 0
+}
+
+# --status: report what this host is pointed at. Read-only, needs no root.
+# Exit 0 when the mirror is in use, 1 when it is not, so it can drive scripts.
+status() {
+  detect_os
+  info "detected: ${PRETTY_NAME:-$OS_ID} (id=$OS_ID codename=${CODENAME:-n/a})"
+
+  local dirs=() p f matched=0
+  for p in /etc/apt/sources.list /etc/apt/sources.list.d /etc/yum.repos.d; do
+    [ -e "$p" ] && dirs+=("$p")
+  done
+  if [ "${#dirs[@]}" -eq 0 ]; then
+    c_err "no apt or dnf configuration found — unsupported system"
+    exit 2
+  fi
+
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    if [ "$matched" -eq 0 ]; then
+      c_ok "using $MIRROR_HOST:"
+      matched=1
+    fi
+    echo "    $f ($(grep -c "$MIRROR_HOST" "$f" 2>/dev/null || echo 0) line(s))"
+  done <<EOF
+$(grep -rls "$MIRROR_HOST" "${dirs[@]}" 2>/dev/null || true)
+EOF
+
+  [ "$matched" -eq 1 ] || c_warn "not using $MIRROR_HOST — this host is on its default repositories"
+
+  # A non-empty deb822 file silently wins over sources.list on Ubuntu 24.04+ and
+  # recent Debian, so a "configured" host can still be fetching from upstream.
+  for f in /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/debian.sources; do
+    if [ -s "$f" ] && ! grep -q "$MIRROR_HOST" "$f" 2>/dev/null; then
+      c_warn "$f is not empty and does not name the mirror — it overrides sources.list"
+    fi
+  done
+
+  local snap=""
+  for p in "$BACKUP_ROOT"/*; do
+    [ -f "$p/manifest" ] && snap="$p"
+  done
+  if [ -n "$snap" ]; then
+    info "last setup.sh run: $(basename "$snap") ($(wc -l < "$snap/manifest" | tr -d ' ') file(s) recorded)"
+  else
+    info "no setup.sh snapshot in $BACKUP_ROOT (never run here, or not readable as this user)"
+  fi
+
+  probe_init
+  if probe_url "$MIRROR/"; then
+    info "$MIRROR is reachable"
+  else
+    c_warn "$MIRROR is NOT reachable from this host"
+  fi
+
+  [ "$matched" -eq 1 ] && exit 0 || exit 1
 }
 
 detect_os() {
@@ -466,6 +526,7 @@ refresh_dnf() {
 }
 
 main() {
+  [ "$STATUS" -eq 1 ] && status
   [ "$ROLLBACK" -eq 1 ] && rollback
   [ "$DRY_RUN" -eq 1 ] || require_root
 
