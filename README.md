@@ -31,6 +31,37 @@ curl -fsSL https://raw.githubusercontent.com/parsdev-com/mirror/main/setup.sh | 
 
 <details>
   <summary>
+  Ubuntu 26.04 LTS — resolute
+  </summary>
+
+فایل `/etc/apt/sources.list` بازنویسی می شود. در نسخه های ۲۴.۰۴ به بعد فایل `/etc/apt/sources.list.d/ubuntu.sources` هم باید خالی شود تا مخزن پیش فرض جایگزین تنظیمات زیر نشود:
+
+```bash
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+sudo cp -a /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak
+sudo truncate -s 0 /etc/apt/sources.list.d/ubuntu.sources
+sudo tee /etc/apt/sources.list >/dev/null <<'EOF'
+# ParsDev Mirror — Ubuntu 26.04
+deb https://mirror.parsdev.com/ubuntu/ resolute main restricted universe multiverse
+deb https://mirror.parsdev.com/ubuntu/ resolute-updates main restricted universe multiverse
+deb https://mirror.parsdev.com/ubuntu/ resolute-security main restricted universe multiverse
+deb https://mirror.parsdev.com/ubuntu/ resolute-backports main restricted universe multiverse
+EOF
+sudo apt-get update
+```
+
+بازگشت:
+
+```bash
+sudo cp /etc/apt/sources.list.bak /etc/apt/sources.list
+sudo cp -a /etc/apt/sources.list.d/ubuntu.sources.bak /etc/apt/sources.list.d/ubuntu.sources
+sudo apt-get update
+```
+
+</details>
+
+<details>
+  <summary>
   Ubuntu 22.04 LTS — jammy
   </summary>
 
@@ -326,6 +357,6 @@ sudo apt-get update
 
 ## توزیع های میرور شده
 
-Ubuntu focal و jammy · Debian bullseye و bookworm و trixie · AlmaLinux 8 و 9 و 10 · Proxmox VE و Backup Server.<br/>
+Ubuntu focal و jammy و resolute · Debian bullseye و bookworm و trixie · AlmaLinux 8 و 9 و 10 · Proxmox VE و Backup Server.<br/>
 Ubuntu و Debian تنها برای معماری amd64 میرور شده اند.<br/>
 فهرست کامل مخازن از طریق [mirror.parsdev.com](https://mirror.parsdev.com/) قابل مرور است.

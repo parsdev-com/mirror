@@ -242,9 +242,9 @@ is_pbs() {
 
 setup_ubuntu() {
   case "$CODENAME" in
-    focal|jammy) ;;
+    focal|jammy|resolute) ;;
     *)
-      c_err "Ubuntu '$CODENAME' is not mirrored. Only focal (20.04) and jammy (22.04) are available."
+      c_err "Ubuntu '$CODENAME' is not mirrored. Only focal (20.04), jammy (22.04) and resolute (26.04) are available."
       c_err "Installer images for newer releases are at $MIRROR/ubuntu-releases/"
       exit 1
       ;;
